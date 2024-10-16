@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}Сбер-банк{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/bills.css' %}">
+<div class="line">
+    <form action="{% url 'bills' %}" method="GET">
+        <div class="line-search">
+            <input type="text" class="searching" placeholder="Поиск" name="banknotes" value="{{ banknotes}}">
+        </div>      
+    </form>
+    {% if cart_count > 0 %}
+        <a href="/operat/{{pick_operat.id}}/">
+            <img src="http://127.0.0.1:9000/lr2/cashhand.png" class="dep">
+        </a>
+    {% else %}
+        <img src="http://127.0.0.1:9000/lr2/cashhand.png" class="dep disabled">
+    {% endif %}
+    <p class="count_oper">{{ cart_count }}</p>
+</div>
+<div class="space">
+<div class="container">
+    {% for bill in bills %}
+        {% include 'bill_element.html' %}
+    {% empty %}
+    <li>Список пуст</li>
+    {% endfor %}
+</div>
+</div>
+{% endblock %}

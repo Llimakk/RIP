@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}Внесение/Снятие{% endblock %}
+
+{% block content %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/operat.css' %}">
+    <div class="info">
+        <p class="req">Заявка №318</p>
+        <p class="dat">{{ operat.current_date }}</p>
+        <p class="address">г. Москва, ул. Мирная 11, д. 2</p>
+        <p class="operation">Снятие наличных</p>
+    </div>
+    
+    <div class="cart-container">
+        {% if cart %}
+            <ul>
+                {% for item in cart %}
+                    {% include 'operat_el.html' with bill=item %}  <!-- Вставляем товар из корзины -->
+                {% endfor %}
+            </ul>
+
+            <!-- Добавляем форму с кнопкой для удаления всех товаров -->
+            <form action="{% url 'clear_cart' %}" method="post">
+                {% csrf_token %}
+                <button type="submit" class="clear-cart-btn">Удалить все купюры</button>
+            </form>
+        {% else %}
+            <p>Ваша корзина пуста.</p>
+        {% endif %}
+    </div>
+
+    <!-- Если есть сообщение об удалении заявки -->
+    {% if message %}
+        <p class="alert">{{ message }}</p>
+    {% endif %}
+
+    <div class="space">
+        <div class="operat-container">
+            {% for bill in operat.bills %}
+                {% include 'operat_el.html' %}
+            {% empty %}
+            <li>Список пуст</li>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

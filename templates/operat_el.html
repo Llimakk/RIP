@@ -1,0 +1,13 @@
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/operat_el.css' %}">
+<div class="operat-card">
+    <img src="{{ bill.imagen }}" class="imagen">
+    <div class="lin"></div>
+    <p class="name-bill">{{ bill.name }}</p>
+    <div class="lin"></div>
+    {% if bill.count %}
+        <p class="count">{{ bill.count }}</p>
+    {% else %}
+        <p class="count">1</p>  <!-- По умолчанию, если не указано количество -->
+    {% endif %}
+</div>

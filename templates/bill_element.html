@@ -1,0 +1,14 @@
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/bill_element.css' %}">
+<div class="bills">
+    <a href="{% url 'bill' bill.id %}"><img src="{{bill.imagen}}" class="image-bills"></a>
+    <div class="lin">
+        <p class="bill-name">{{bill.name}}</p>
+        <form action="{% url 'add_to_cart' bill.id %}" method="post">
+            {% csrf_token %}
+            <button type="submit" class="add-to-cart-button">
+                <img src="http://127.0.0.1:9000/lr2/pick.png" alt="Добавить в корзину" class="picking">
+            </button>
+        </form>
+    </div>
+</div>
