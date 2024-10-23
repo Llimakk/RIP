@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}{{ bill.name }}{% endblock %}
+
+{% block content %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/bill.css' %}">
+    <p class="tit">Информация о купюре</p>
+    <div class="bill">
+        <div class="image-bill">
+            <img src="{{ bill.imagen }}" class="face">
+            <img src="{{ bill.imagen_back }}" class="back">
+        </div>
+        <div class="info">
+            <p style="color: #8F96A3; font: 18px PT_Russia-Text, sans-serif; margin-bottom: 0%;">Дата ввода в обращение</p>
+            <p class="year">{{bill.year}}</p>
+            <p class="description">{{bill.description}}</p>
+        </div>
+    </div>
+{% endblock %}

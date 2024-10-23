@@ -1,0 +1,68 @@
+.tit{
+  font-size: 38px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center; 
+  align-items: center; 
+  margin:1% 0% 0% 0%;
+}
+
+.bill{
+  border-radius: 20px;
+  gap:2%;
+  background-color: #FFFAFA;
+  padding: 1%;
+  margin-top: 1%;
+  margin-bottom: 2%;
+  margin-left: 2%;
+  margin-right: 2%;
+  width:auto;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.image-bill{
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.face{
+  width: 560px;
+  height: 230px;
+  margin-top: 2%;
+  margin-left: 2%;
+  margin-right: 2%;
+}
+
+.back{
+  width: 560px;
+  height: 230px;
+  margin-top: 3%;
+  margin-left: 2%;
+  margin-right: 2%;
+}
+
+.info{
+  margin-left: 2%;
+  align-items: center;
+}
+
+.year{
+  font-size: calc(8px + 8*((100vw - 320px) / 1043));
+  font-weight: 500;
+  line-height: 1.5;
+  color: #111214;
+  font: 20px PT_Russia-Text, sans-serif;
+  margin-bottom: 50px;
+  margin-top: 1%;
+  display: flex;
+
+}
+
+.description{
+  font-size: 24px;
+  font-weight: 500;
+  margin-bottom: 10%;
+}

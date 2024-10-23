@@ -1,0 +1,46 @@
+.operat-card{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    justify-items: center;
+    margin: auto;
+    background-color: #FFFAFA;
+    border: 3px solid #e6e6e6;
+    padding: 1%;
+}
+
+.imagen{
+    width: 231px;
+    height: 103px;
+    margin-left: 3%;
+}
+
+/* .image::before {
+    content: '';
+    position: absolute;
+    top: -20px; 
+    left: -20px; 
+    right: -20px;
+    bottom: -20px; 
+    z-index: -1; 
+} */
+
+.name-bill{
+    font-size: 32px;
+}
+
+.count{
+    font-size: 32px;
+    justify-content: space-between;
+    justify-items: center;
+    align-items:center;
+    margin-right: 10%;
+}
+
+.lin{
+    background-color: black;
+    height: auto;
+    margin: 4px;
+    border:2px solid #e6e6e6;
+}

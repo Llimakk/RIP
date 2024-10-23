@@ -1,0 +1,18 @@
+{% load static %}
+
+<!doctype html>
+<html lang="en" class="h-100">
+<head>
+  <meta charset="utf-8">
+    <title>{% block title %}{% endblock %}</title>
+</head>
+<body>
+  <link rel="stylesheet" type="text/css" href="{% static 'css/base.css' %}">
+  <div class="upper">
+    <a class="logo" href="/bills/"><img src="http://127.0.0.1:9000/rip/icon.png"></a>
+    <p class="name">СБЕР БАНК</p>
+  </div>
+    {% block content %}{% endblock %}
+    
+</body>
+</html>

@@ -1,0 +1,9 @@
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/operat_el.css' %}">
+<div class="operat-card">
+    <img src="{{ bill.imagen }}" class="imagen">
+    <div class="lin"></div>
+    <p class="name-bill">{{bill.name}}</p>
+    <div class="lin"></div>
+    <p class="count">{{bill.count}}</p>
+</div>
