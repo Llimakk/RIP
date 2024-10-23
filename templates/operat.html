@@ -6,10 +6,12 @@
 
 {% block content %}
     <link rel="stylesheet" type="text/css" href="{% static 'css/operat.css' %}">
+    
     <div class="info">
-        <p class="req">Заявка №318</p>
-        <p class="dat">{{ operat.current_date }}</p>
-        <p class="address">г. Москва, ул. Мирная 11, д. 2</p>
+        <!-- Динамическое отображение номера заявки и даты -->
+        <p class="req">Заявка №{{ operat.id }}</p>
+        <p class="dat">{{ operat.date_created}}</p>
+        <p class="address">{{ operat.address }}</p>
         <p class="operation">Снятие наличных</p>
     </div>
     
@@ -21,7 +23,7 @@
                 {% endfor %}
             </ul>
 
-            <!-- Добавляем форму с кнопкой для удаления всех товаров -->
+            <!-- Форма с кнопкой для удаления всех купюр из корзины -->
             <form action="{% url 'clear_cart' %}" method="post">
                 {% csrf_token %}
                 <button type="submit" class="clear-cart-btn">Удалить все купюры</button>
@@ -35,14 +37,4 @@
     {% if message %}
         <p class="alert">{{ message }}</p>
     {% endif %}
-
-    <div class="space">
-        <div class="operat-container">
-            {% for bill in operat.bills %}
-                {% include 'operat_el.html' %}
-            {% empty %}
-            <li>Список пуст</li>
-            {% endfor %}
-        </div>
-    </div>
 {% endblock %}

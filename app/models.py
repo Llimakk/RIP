@@ -45,13 +45,13 @@ class Operat(models.Model):
 
     def get_bills(self):
         res = []
-
-        for item in BillOperat.objects.filter(operat=self):
-            product = item.bill
-            product.value = item.value
+        # Фильтрация по правильному полю id_operat_mm
+        for item in BillOperat.objects.filter(id_operat_mm=self):
+            product = item.id_bill_mm  # Доступ к объекту Bill через id_bill_mm
+            product.value = item.value  # Добавляем количество
             res.append(product)
-
         return res
+
 
     def get_status(self):
         return dict(STATUS_CHOICES).get(self.status)
