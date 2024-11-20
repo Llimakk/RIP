@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}внесение/снятие{% endblock %}
+
+{% block content %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/operat.css' %}">
+    <div class="info">
+        <p class="req">Заявка №318</p>
+        <p class="dat">{{operat.current_date}}</p>
+        <p class="address">г. Москва, ул. Мирная 11, д. 2</p>
+        <p class="operation">Снятие наличных</p>
+    </div>
+    <div class="space">
+        <div class="operat-container">
+            {% for bill in operat.bills %}
+                {% include 'operat_el.html' %}
+            {% empty %}
+            <li>Список пуст</li>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

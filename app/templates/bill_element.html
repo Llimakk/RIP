@@ -1,0 +1,6 @@
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/bill_element.css' %}">
+<div class="bills">
+    <a href="/bills/{{bill.id}}/"><img src={{bill.imagen}} class="image-bills"></a>
+    <p class="bill-name">{{bill.name}}</p>
+</div>
