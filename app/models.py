@@ -39,7 +39,6 @@ class Operat(models.Model):
     date_formation = models.DateTimeField(verbose_name="Дата формирования", blank=True, null=True)
     date_complete = models.DateTimeField(verbose_name="Дата завершения", blank=True, null=True)
     address = models.CharField(max_length=255, default="г. Москва, ул. Мирная 11, д. 2")
-    # count = models.IntegerField(default=1)
     success = models.BooleanField(blank=True, null=True)
 
     owner = models.ForeignKey(User, on_delete=models.DO_NOTHING, verbose_name="Создатель", related_name='owner', null=True)

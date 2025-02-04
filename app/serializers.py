@@ -70,9 +70,12 @@ class BillOperatSerializer(serializers.ModelSerializer):
 
 
 class UserSerializer(serializers.ModelSerializer):
+    is_staff = serializers.BooleanField(default=False, required=False)
+    is_superuser = serializers.BooleanField(default=False, required=False)
+
     class Meta:
         model = User
-        fields = ('id', 'email', 'password', 'first_name', 'last_name', 'date_joined', 'password', 'username')
+        fields = ('id', 'email', 'password', 'first_name', 'last_name', 'date_joined', 'is_superuser', 'username', 'is_staff')
 
         def get_fields(self):
             new_fields = OrderedDict()

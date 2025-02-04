@@ -386,7 +386,7 @@ def delete_bill_from_operat(request, operat_id, bill_id):
     
     user = get_object_or_404(User, username=username)
 
-    if not BillOperat.objects.filter(operat_id=operat_id, bill_id=bill_id, owner=user).exists():
+    if not BillOperat.objects.filter(operat_id=operat_id, bill_id=bill_id).exists():
         return Response(status=status.HTTP_404_NOT_FOUND)
 
     item = BillOperat.objects.get(operat_id=operat_id, bill_id=bill_id)
@@ -418,7 +418,7 @@ def update_bill_in_operat(request, operat_id, bill_id):
     
     user = get_object_or_404(User, username=username)
 
-    if not BillOperat.objects.filter(bill_id=bill_id, operat_id=operat_id, owner=user).exists():
+    if not BillOperat.objects.filter(bill_id=bill_id, operat_id=operat_id).exists():
         return Response(status=status.HTTP_404_NOT_FOUND)
 
     item = BillOperat.objects.get(bill_id=bill_id, operat_id=operat_id)
@@ -431,7 +431,7 @@ def update_bill_in_operat(request, operat_id, bill_id):
     return Response(serializer.data)
 
 
-@swagger_auto_schema(method='post', request_body=UserLoginSerializer)
+@swagger_auto_schema(method='post', request_body=UserSerializer)
 @api_view(["POST"])
 def login(request):
     try:
@@ -446,7 +446,7 @@ def login(request):
             random_key = str(uuid.uuid4()) 
             session_storage.set(random_key, username)
 
-            response = Response({'status': f'{username} успешно вошел в систему'})
+            response = Response({"username" : {username}, 'status': f'{username} успешно вошел в систему', "session_id" : random_key})
             response.set_cookie("session_id", random_key)
 
             return response
@@ -472,49 +472,8 @@ def register(request):
 
 
 @api_view(["POST"])
-@permission_classes([IsAuthenticated])
-def logout(request):
-    try:
-        # Получаем session_id из cookies
-        session_id = request.COOKIES.get("session_id")
-        if not session_id:
-            return Response({"Message": "Сессия не найдена"}, status=400)
-        
-        # Извлекаем имя пользователя из Redis
-        username = session_storage.get(session_id)
-        if not username:
-            return Response({"Message": "Пользователь не найден в сессии"}, status=400)
-
-        username = username.decode('utf-8')
-        
-        # Вызов стандартного logout для завершения сессии
-        django_logout(request)
-
-        # Формируем ответ
-        response = Response({'Message': f'{username} вышел из системы'}, status=200)
-
-        # Удаляем cookie с session_id
-        response.delete_cookie('session_id')
-        
-        return response
-
-    except KeyError as e:
-        # Ошибка, если нет cookies или проблем с извлечением данных из Redis
-        return Response({"Message": "Нет авторизованных пользователей"}, status=403)
-
-    except Exception as e:
-        # Логирование ошибки (например, ошибка Redis)
-        return Response({"Message": f"Ошибка: {str(e)}"}, status=500)
-
-
-
-@swagger_auto_schema(method='PUT', request_body=UserSerializer)
-@api_view(["PUT"])
 # @permission_classes([IsAuthenticated])
-def update_user(request, user_id):
-    if not User.objects.filter(pk=user_id).exists():
-        return Response(status=status.HTTP_404_NOT_FOUND)
-
+def logout(request):
     try:
         username = session_storage.get(request.COOKIES["session_id"])
         username = username.decode('utf-8')
@@ -525,13 +484,54 @@ def update_user(request, user_id):
         )
     
     user = get_object_or_404(User, username=username)
+        
+        # Вызов стандартного logout для завершения сессии
+    django_logout(request)
 
-    if user.pk != user_id:
-        return Response(status=status.HTTP_404_NOT_FOUND)
+        # Формируем ответ
+    response = Response({'Message': f'{username} вышел из системы'}, status=200)
 
-    serializer = UserSerializer(user, data=request.data, partial=True)
+        # Удаляем cookie с session_id
+    response.delete_cookie('session_id')
+        
+    return response
+
+@swagger_auto_schema(method='PUT', request_body=UserSerializer)
+@api_view(["PUT"])
+def update_user(request):
+    try:
+        # Извлекаем username из сессии
+        username = session_storage.get(request.COOKIES.get("session_id"))
+        if not username:
+            return Response(
+                {"Message": "Нет авторизованных пользователей"},
+                status=status.HTTP_405_METHOD_NOT_ALLOWED
+            )
+        username = username.decode('utf-8')
+    except Exception:
+        return Response(
+            {"Message": "Ошибка при обработке сессии"},
+            status=status.HTTP_500_INTERNAL_SERVER_ERROR
+        )
+    
+    # Получаем пользователя по username
+    user = get_object_or_404(User, username=username)
+
+    mutable_data = request.data.copy()
+
+    if 'password' in mutable_data:
+        if isinstance(mutable_data['password'], str):
+            new_password = mutable_data.pop('password') 
+        else:
+            new_password = mutable_data.pop('password')[0]
+        logger.error(f"new password = {new_password}")
+        user.set_password(new_password)  
+        user.save() 
+
+    # Валидируем и обновляем данные пользователя
+    serializer = UserSerializer(user, data=mutable_data, partial=True)
     if not serializer.is_valid():
-        return Response(status=status.HTTP_409_CONFLICT)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     serializer.save()
 
